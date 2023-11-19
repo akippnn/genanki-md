@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "genanki-ai-example"
+version = "0.1.0"
+description = "Generate an Anki deck using parsable text formatted by AI"
+authors = ["akippnn <80670461+akippnn@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "genanki_ai_example"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+genanki = "^0.13.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+poetry = "poetry.console.application:main"

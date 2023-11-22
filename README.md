@@ -2,6 +2,10 @@
 
 genanki-md is a Python wrapper for genanki that facilitates parsing UTF-8 files using the [Obsidian-Flavored](https://help.obsidian.md/Editing+and+formatting/Obsidian+Flavored+Markdown) Markdown Callouts syntax.
 
+## Roadmap
+
+- [ ] Add GUI
+
 ## Usage
 
 To use genanki-md, create a markdown file in the Obsidian app, utilizing the Callouts syntax. For instance:
@@ -29,16 +33,16 @@ If you are using [Nix](https://en.wikipedia.org/wiki/Nix_(package_manager)), you
 
 Install the necessary dependencies and cache using the following:
 
-```bash
+```sh
 poetry install --no-root
 ```
 
 To verify that everything is set up correctly:
 
-```bash
+```sh
 $ poetry run ga
-usage: ga.cmd [-h] [--model {b,r,o,t,c}] [--css CSS] source output
-ga.cmd: error: the following arguments are required: source, output
+usage: ga.cmd [-h] --source SOURCE, --output OUTPUT, [--verbose] [--model {b,r,o,t,c}] [--css CSS]
+ga.cmd: error: the following arguments are required: --source/-s, --output/-s
 ```
 
 ## File
@@ -56,6 +60,12 @@ Obsidian's support for any keyword inside the Callouts syntax allows for versati
 > [!anki-b]- What does this do?
 > Foldable callouts!  
 > Another line.
+```
+
+Currently, you will have to use the Terminal to create notes. For example:
+
+```sh
+poetry run ga -s {file1} -s {file2} -v -m {model} -o {output}
 ```
 
 ## Models

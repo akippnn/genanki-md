@@ -8,7 +8,7 @@ from typing import LiteralString, TextIO
 from .core import create_notes, create_package
 from .errors import InvalidSyntax
 from .parsers import parse_input
-from .builtin_models import MODELS
+from .builtin_models import MODELS, Model
 
 DESCRIPTION: str = "Generate an Anki deck from a Markdown file"
 DEFAULT_MODEL: str = "b" # see builtin_models.py
@@ -51,27 +51,30 @@ def get_back_text(file_iter: TextIO) -> str:
 
 def main() -> None:
     argp = argparse.ArgumentParser(description=DESCRIPTION)
-    argp.add_argument("source",
+    argp.add_argument("--source", "-s",
                       type=argparse.FileType("r", encoding="utf-8"),
+                      required=True,
                       action="append",
                       help="Path to the input UTF-8 file to be parsed")
-    argp.add_argument("output",
+    argp.add_argument("--output", "-o",
+                      required=True,
                       help="Anki deck package to be generated")
+    argp.add_argument("--verbose", "-v",
+                      action="store_true")
     argp.add_argument("--model", "-m",
                       default=DEFAULT_MODEL,
                       choices=MODELS.keys(),
                       help="Model used when the option was not specified for that individual callout (see genanki-md/models.py)")
     argp.add_argument("--css",
                       type=argparse.FileType("r"),
-                      default=None,
                       help="Override the default CSS of all the models with your own CSS file (see example.css)")
     args = argp.parse_args()
   
     input_files: list = args.source
     output_file: str = args.output
-    model: str = args.model
-    css: str = args.css.readline()
-    args.css.close()
+    verbose: bool = args.verbose
+    model: Model = MODELS[args.model]
+    css: str | None = args.css.readline() if args.css else None
 
     try:
         DATA[output_file]
@@ -82,34 +85,35 @@ def main() -> None:
         with DATA_FILE("w") as fp:
             json.dump(DATA, fp)
 
+    if verbose:
+        verbose = lambda x: print(x)
+    else:
+        verbose = lambda x: ...
+
     parsed_files = list()
+    notes = iter(())
 
     for file in input_files:
         parsed_files.append(parse_input(
-            file,
-            MODELS,
-            REGEXP,
-            get_front_text,
-            get_back_text))
+            infile=file,
+            models=MODELS,
+            regexp=REGEXP,
+            _front_text=get_front_text,
+            _back_text=get_back_text))
 
-    if len(parsed_files) > 1:
-        for cards in parsed_files:
-            notes = itertools.chain(notes, create_notes(
-                cards,
-                model,
-                css,
-                print))
-    else:
-        notes = create_notes(
-                parsed_files[0],
-                model,
-                css,
-                print)
+    for file in parsed_files:
+        notes = itertools.chain(notes, create_notes(
+            file=file,
+            models=MODELS,
+            model=model,
+            css = css,
+            _callback = verbose
+        ))
 
     package = create_package(
-        deck_uid,
-        output_file,
-        notes)
+        unique_id=deck_uid,
+        name=output_file,
+        notes=notes)
 
     package.write_to_file(f"{output_file}.apkg")
 

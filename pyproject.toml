@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "genanki-md"
-version = "0.1.0"
+version = "0.1.2"
 description = "Generate an Anki deck from a Markdown file"
 authors = ["akippnn <80670461+akippnn@users.noreply.github.com>"]
 license = "MIT"

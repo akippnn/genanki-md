@@ -2,22 +2,21 @@ import genanki
 import sys
 
 from collections.abc import Callable, Iterator
-from .builtin_models import MODELS
 from .parsers import Card
-
 
 def create_notes(
         cards: list[Card],
-        default_model: genanki.Model,
+        models: dict[str, genanki.model.Model],
+        default_model: genanki.model.Model,
         css: str | None = None,
-        _callback: Callable[[genanki.Note], any] = None
+        _callback: Callable[[genanki.Note], any] | None = None
         ) -> Iterator[genanki.Note]:
 
     for card in cards:
         if not card.model:
-            model = MODELS[default_model]
+            model = default_model
         else:
-            model = MODELS[card.model]
+            model = models[card.model]
         
         if css:
             model.css = css

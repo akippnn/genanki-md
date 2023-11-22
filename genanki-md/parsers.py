@@ -4,7 +4,7 @@ import sys
 from typing import Callable, LiteralString, TextIO
 from genanki.model import Model
 
-from .errors import InvalidCommand
+from .errors import InvalidSyntax
 
 
 class Card:
@@ -23,8 +23,8 @@ def parse_input(
         infile: TextIO,
         models: dict[str, Model],
         regexp: LiteralString,
-        _front_text_callback: Callable[[str], str],
-        _back_text_callback: Callable[[TextIO], str]
+        _front_text: Callable[[str], str],
+        _back_text: Callable[[TextIO], str]
         ) -> set[Card]:
 
     cards = set() 
@@ -41,12 +41,12 @@ def parse_input(
             if option in models:
                 current_model = option 
             elif option:
-                raise InvalidCommand(f"\"{option}\" is not a subcommand.")
+                raise InvalidSyntax(f"\"{option}\" is not a model option.")
             else:
                 current_model = None
 
-            current_front = _front_text_callback(line)
-            current_back = _back_text_callback(infile)
+            current_front = _front_text(line)
+            current_back = _back_text(infile)
 
             cards.add(Card(
                 current_front,

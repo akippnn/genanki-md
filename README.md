@@ -1,16 +1,75 @@
 # genanki-md
 
-This is a Python wrapper for genanki that parses Markdown files where the input may be 
+genanki-md is a Python wrapper for genanki that facilitates parsing UTF-8 files using the [Obsidian-Flavored](https://help.obsidian.md/Editing+and+formatting/Obsidian+Flavored+Markdown) Markdown Callouts syntax.
+
+## Usage
+
+To use genanki-md, create a markdown file in the Obsidian app, utilizing the Callouts syntax. For instance:
+
+```md
+> [!anki-b] Question  
+> Answer
+
+> [!anki-r] Basic and Reversed
+Two cards!
+
+> [!anki-c] Cloze model
+> {{c1:Rome}} is the capital city of Italy.
+```
+
+For more details, see the examples in the "File" section below.
 
 ## Requirements
 
 - `poetry`
 
-For [Nix](https://en.wikipedia.org/wiki/Nix_(package_manager)), you may simply run `nix shell` in your local copy of this repository and proceed.
+If you are using [Nix](https://en.wikipedia.org/wiki/Nix_(package_manager)), you can run `nix shell` in your local copy of this repository to set up the environment.
 
-## Usage
+## Installation
+
+Install the necessary dependencies and cache using the following:
 
 ```bash
-poetry install
-poetry run
+poetry install --no-root
 ```
+
+To verify that everything is set up correctly:
+
+```bash
+$ poetry run ga
+usage: ga.cmd [-h] [--model {b,r,o,t,c}] [--css CSS] source output
+ga.cmd: error: the following arguments are required: source, output
+```
+
+## File
+
+To begin, create a markdown file using the Obsidian app. For example, a card with a basic model and a one-line answer may look like this:
+
+```md
+> [!anki-b] Question  
+Answer
+```
+
+Obsidian's support for any keyword inside the Callouts syntax allows for versatile use regardless of supported type.
+
+```md
+> [!anki-b]- What does this do?
+> Foldable callouts!  
+> Another line.
+```
+
+## Models
+
+genanki-md supports the following models:
+
+```py
+MODELS: dict[str, Model] = {
+  "b": BASIC_MODEL,
+  "r": BASIC_AND_REVERSED_CARD_MODEL,
+  "o": BASIC_OPTIONAL_REVERSED_CARD_MODEL,
+  "t": BASIC_TYPE_IN_THE_ANSWER_MODEL,
+  "c": CLOZE_MODEL
+}
+```
+
+Choose the appropriate model based on your desired card type.

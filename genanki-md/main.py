@@ -15,6 +15,18 @@ DEFAULT_MODEL: str = "b" # see builtin_models.py
 DATA_FILE: TextIO = lambda mode: open("data.json", mode=mode)
 REGEXP: LiteralString = r"> \[(!anki)(?:-([\w-]+))?\]"
 
+try:
+    fp = DATA_FILE("r")
+    DATA = json.load(fp)
+
+except FileNotFoundError:
+    fp = DATA_FILE("w")
+    DATA = {}
+    json.dump(DATA, fp)
+
+finally:
+    fp.close()
+
 
 def get_front_text(line: str) -> str:
     line = line[line.find("]") + 1:]
@@ -100,18 +112,6 @@ def main() -> None:
         notes)
 
     package.write_to_file(f"{output_file}.apkg")
-
-try:
-    fp = DATA_FILE("r")
-    DATA = json.load(fp)
-
-except FileNotFoundError:
-    fp = DATA_FILE("w")
-    DATA = {}
-    json.dump(DATA, fp)
-
-finally:
-    fp.close()
 
 if __name__ == "__main__":
     main()

@@ -58,7 +58,7 @@ def main() -> None:
                       help="Path to the input UTF-8 file to be parsed")
     argp.add_argument("--output", "-o",
                       required=True,
-                      help="Anki deck package to be generated")
+                      help="Anki deck package to be generated. Use existing processed name")
     argp.add_argument("--verbose", "-v",
                       action="store_true")
     argp.add_argument("--model", "-m",

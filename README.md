@@ -2,13 +2,7 @@
 
 genanki-md is a Python wrapper for genanki that facilitates parsing UTF-8 files using the [Obsidian-Flavored](https://help.obsidian.md/Editing+and+formatting/Obsidian+Flavored+Markdown) Markdown Callouts syntax.
 
-## Roadmap
-
-- [ ] Add GUI
-
-## Usage
-
-To use genanki-md, create a markdown file in the Obsidian app, utilizing the Callouts syntax. For instance:
+This is a proof-of-concept project.
 
 ```md
 > [!anki-b] Question  
@@ -19,6 +13,26 @@ Two cards!
 
 > [!anki-c] Cloze model
 > {{c1:Rome}} is the capital city of Italy.
+```
+
+## Roadmap
+
+- [ ] Obsidian Plugin
+- [ ] Separate GUI
+
+## Usage
+
+To use genanki-md, create a markdown file in the Obsidian app, utilizing the Callouts syntax. For instance:
+
+```md
+> [!anki-b] Question  
+> Answer
+
+> [!anki-r] Basic + reversed model
+Two cards, but one swapped positions.
+
+> [!anki-c] {{c1:Rome}} is the capital city of Italy.
+> Cloze model
 ```
 
 For more details, see the examples in the "File" section below.
